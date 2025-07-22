@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Keycloak OIDC Protected Static Webapp</title>
+  <script src="https://cdn.jsdelivr.net/npm/keycloak-js@24.0.4/dist/keycloak.min.js"></script>
+</head>
+<body>
+  <h1 id="hello"></h1>
+  <button onclick="keycloak.logout()">Logout</button>
+  <script>
+    const keycloak = new Keycloak({
+      url: 'http://<KEYCLOAK-EXTERNAL-IP>:8080',
+      realm: 'master',
+      clientId: 'demo-static-client'
+    });
+    keycloak.init({ onLoad: 'login-required' }).then(function(authenticated) {
+      document.getElementById('hello').innerText =
+        'Hello, ' + keycloak.tokenParsed.preferred_username + '!';
+    });
+  </script>
+</body>
+</html>
