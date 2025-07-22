@@ -1,7 +1,7 @@
 Overview
 This project provisions an AKS (Azure Kubernetes Service) cluster and deploys:
 
-a Keycloak authentication server (backed by a managed Postgres DB),
+a Keycloak authentication server (backed by a managed Postgres DB)
 
 and a static webapp (NGINX) protected by Keycloak.
 
