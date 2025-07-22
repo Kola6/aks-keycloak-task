@@ -98,7 +98,7 @@ Access the webapp:
 kubectl port-forward -n keycloakns svc/static-web 8083:80
 Then open http://localhost:8083
 ```
-(https://raw.https://github.com/Kola6/aks-keycloak-task/blob/main/images/img5.png)
+(https://raw.https://github.com/Kola6/aks-keycloak-task/blob/main/images/img5.png) ![Keycloak](./images/img5.png)
 
 
 Create a test user in Keycloak admin and test OIDC login.
