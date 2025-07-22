@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  vars:
+    namespace: keycloakns
+  tasks:
+    - name: Ensure namespace exists
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ namespace }}"
+        state: present
+
+    - name: Deploy Postgres Secret
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        src: ../k8s/secrets.yaml
+
+    - name: Deploy Postgres
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        src: ../k8s/postgres-deployment.yaml
+
+    - name: Deploy Keycloak
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        src: ../k8s/keycloak-deployment.yaml
+
+    - name: Deploy Webapp ConfigMap
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        src: ../k8s/webapp-configmap.yaml
+
+    - name: Deploy Webapp Deployment
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ namespace }}"
+        src: ../k8s/webapp-deployment.yaml

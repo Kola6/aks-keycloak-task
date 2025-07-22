@@ -1,0 +1,113 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    namespace: keycloakns
+    location: eastus
+    resource_group: keycloak-aks-rg
+    vnet_name: keycloak-aks-vnet
+    subnet_name: keycloak-aks-subnet
+    storage_account: keycloakaksstore
+    storage_container: tfstate
+    aks_name: keycloak-aks
+
+  tasks:
+   - name: Delete AKS cluster
+      community.azure.azure_rm_aks:
+        resource_group: "{{ resource_group }}"
+        name: "{{ aks_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Delete storage container
+      community.azure.azure_rm_storageblob:
+        resource_group: "{{ resource_group }}"
+        storage_account_name: "{{ storage_account }}"
+        container: "{{ storage_container }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Delete storage account
+      community.azure.azure_rm_storageaccount:
+        resource_group: "{{ resource_group }}"
+        name: "{{ storage_account }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Delete subnet
+      community.azure.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        name: "{{ subnet_name }}"
+        virtual_network: "{{ vnet_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Delete virtual network
+      community.azure.azure_rm_virtualnetwork:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vnet_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Delete resource group
+      community.azure.azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        state: absent
+      ignore_errors: yes
+
+      - hosts: localhost
+  connection: local
+  vars:
+    namespace: keycloakns
+    location: eastus
+    resource_group: keycloak-aks-rg
+    vnet_name: keycloak-aks-vnet
+    subnet_name: keycloak-aks-subnet
+    storage_account: keycloakaksstore
+    storage_container: tfstate
+    aks_name: keycloak-aks
+
+  tasks:
+  
+    - name: Delete Webapp Deployment
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ namespace }}"
+        src: ../k8s/webapp-deployment.yaml
+      ignore_errors: yes
+
+    - name: Delete Webapp ConfigMap
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ namespace }}"
+        src: ../k8s/webapp-configmap.yaml
+      ignore_errors: yes
+
+    - name: Delete Keycloak Deployment
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ namespace }}"
+        src: ../k8s/keycloak-deployment.yaml
+      ignore_errors: yes
+
+    - name: Delete Postgres Deployment
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ namespace }}"
+        src: ../k8s/postgres-deployment.yaml
+      ignore_errors: yes
+
+    - name: Delete Postgres Secret
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ namespace }}"
+        src: ../k8s/secrets.yaml
+      ignore_errors: yes
+
+    - name: Delete Namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ namespace }}"
+        state: absent
+      ignore_errors: yes
