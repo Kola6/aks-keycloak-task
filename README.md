@@ -10,25 +10,30 @@ All Kubernetes resource configuration and app deployment is handled with Ansible
 CI/CD workflows for rollout, configuration, and teardown are implemented using GitHub Actions.
 
 
-├── .github/workflows/         
-├── ansible/                 
+KEYCLOAK-AKS-PROJECT/
+├── .github/workflows/
+│   ├── deploy.yml
+│   ├── configure.yml
+│   └── destroy.yml
+├── ansible/
 │   ├── deploy.yml
 │   ├── destroy.yml
 │   ├── infra.yml
 │   └── inventory.ini
-├── k8s/                     
+├── k8s/
 │   ├── keycloak-deployment.yaml
 │   ├── postgres-deployment.yaml
 │   ├── secrets.yaml
 │   ├── webapp-configmap.yaml
 │   └── webapp-deployment.yaml
-├── terraform/               
+├── terraform/
 │   ├── main.tf
 │   ├── output.tf
 │   ├── provider.tf
-│   ├── variables.tf
+│   └── variables.tf
 ├── webapp/
 │   └── index.html
+└── README.md
 
 
 Workflow Steps
