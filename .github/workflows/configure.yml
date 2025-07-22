@@ -1,0 +1,29 @@
+name: Configure/Update Application
+
+on:
+  workflow_dispatch:
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo az aks install-cli
+          pip install ansible[azure] kubernetes
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds:
+
+      - name: Get AKS credentials
+        run: az aks get-credentials --resource-group keycloak-aks-rg --name keycloak-aks --overwrite-existing
+
+      - name: Apply K8s config changes (deploy.yml)
+        env:
+          KUBECONFIG: ${{ github.workspace }}/.kube/config
+        run: |
+          ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
