@@ -14,7 +14,6 @@ CI/CD workflows for rollout, configuration, and teardown are implemented using *
 ## Project Structure
 
 ```sh
-KEYCLOAK-AKS-PROJECT/
 ├── .github/workflows/
 │ ├── deploy.yml
 │ ├── configure.yml
@@ -96,11 +95,21 @@ Get the Keycloak and Webapp service EXTERNAL-IPs (or port-forward if ClusterIP):
 kubectl get svc -n keycloakns
 Access the webapp:
 
-kubectl port-forward -n keycloakns svc/static-web 8081:80
-Then open http://localhost:8081
+kubectl port-forward -n keycloakns svc/static-web 8083:80
+Then open http://localhost:8083
+
+https://github.com/Kola6/aks-keycloak-task/blob/main/images/img5.png
 ```
 
 Create a test user in Keycloak admin and test OIDC login.
+
+https://github.com/Kola6/aks-keycloak-task/blob/main/images/img2.png
+https://github.com/Kola6/aks-keycloak-task/blob/main/images/img3.png
+
+https://github.com/Kola6/aks-keycloak-task/blob/main/images/img6.png
+
+https://github.com/Kola6/aks-keycloak-task/blob/main/images/img4.png
+
 
 E. Destroy All Resources
 Either manually:
