@@ -12,6 +12,8 @@ CI/CD workflows for rollout, configuration, and teardown are implemented using *
 ---
 
 ## Project Structure
+
+```sh
 KEYCLOAK-AKS-PROJECT/
 ├── .github/workflows/
 │ ├── deploy.yml
@@ -36,7 +38,7 @@ KEYCLOAK-AKS-PROJECT/
 ├── webapp/
 │ └── index.html
 └── README.md
-
+```
 
 
 ---
