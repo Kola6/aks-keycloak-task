@@ -6,7 +6,7 @@ a Keycloak authentication server (backed by a managed Postgres DB),
 and a static webapp (NGINX) protected by Keycloak.
 
 All infrastructure is provisioned with Terraform.
-All Kubernetes resource configuration and app deployment is handled with Ansible (as required).
+All Kubernetes resource configuration and app deployment is handled with Ansible (as required)
 CI/CD workflows for rollout, configuration, and teardown are implemented using GitHub Actions.
 
 KEYCLOAK-AKS-PROJECT/
