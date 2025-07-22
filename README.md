@@ -1,6 +1,6 @@
 # KEYCLOAK-AKS-PROJECT
 
-This project provisions an AKS (Azure Kubernetes Service) cluster and deploys:
+This project provisions an AKS (Azure Kubernetes Service) cluster and deploys: 
 
 - **Keycloak authentication server** (backed by a managed Postgres DB)
 - **Static webapp (NGINX)** protected by Keycloak
