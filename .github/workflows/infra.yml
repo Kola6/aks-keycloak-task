@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    location: eastus
+    resource_group: keycloak-aks-rg
+    vnet_name: keycloak-aks-vnet
+    vnet_address_prefix: "10.10.0.0/16"
+    subnet_name: keycloak-aks-subnet
+    subnet_prefix: "10.10.0.0/24"
+    storage_account: keycloakaksstore
+    storage_container: tfstate
+    aks_name: keycloak-aks
+    node_count: 2
+    admin_username: azureuser
+    dns_prefix: keycloak-aks
+  tasks:
+    - name: Create resource group
+      community.azure.azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        location: "{{ location }}"
+
+    - name: Create virtual network
+      community.azure.azure_rm_virtualnetwork:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vnet_name }}"
+        address_prefixes:
+          - "{{ vnet_address_prefix }}"
+
+    - name: Create subnet
+      community.azure.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        name: "{{ subnet_name }}"
+        address_prefix: "{{ subnet_prefix }}"
+        virtual_network: "{{ vnet_name }}"
+
+    - name: Create AKS cluster
+      community.azure.azure_rm_aks:
+        resource_group: "{{ resource_group }}"
+        name: "{{ aks_name }}"
+        dns_prefix: "{{ dns_prefix }}"
+        kubernetes_version: "1.29.2"
+        agent_pool_profiles:
+          - name: nodepool1
+            count: "{{ node_count }}"
+            vm_size: Standard_DS2_v2
+            vnet_subnet_id: "/subscriptions/{{ lookup('env','AZURE_SUBSCRIPTION_ID') }}/resourceGroups/{{ resource_group }}/providers/Microsoft.Network/virtualNetworks/{{ vnet_name }}/subnets/{{ subnet_name }}"
+        linux_profile:
+          admin_username: "{{ admin_username }}"
+          ssh_key:
+            key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        enable_rbac: yes
+        state: present
